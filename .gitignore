@@ -48,6 +48,14 @@ coverage/
 # nyc test coverage
 .nyc_output
 
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Temporary folders
+tmp/
+temp/
+
 # Temporary folders
 tmp/
 temp/
