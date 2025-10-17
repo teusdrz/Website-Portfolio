@@ -176,7 +176,7 @@ const Portfolio: React.FC = () => {
                 </SocialLinks>
             </Container>
 
-            <About isVisible={showAbout} onClose={handleClosePage} onNext={() => setCurrentPage(2)} />
+            <About isVisible={showAbout} onClose={handleClosePage} />
             <Career isVisible={showCareer} onClose={handleClosePage} onNext={() => setCurrentPage(3)} />
             <Processes isVisible={showProcesses} onClose={handleClosePage} onNext={() => setCurrentPage(4)} />
             <ProjectCreation isVisible={showProjectCreation} onClose={handleClosePage} onNext={() => setCurrentPage(5)} />

@@ -5,11 +5,11 @@ export class InMemoryPersonalInfoRepository implements PersonalInfoRepository {
     async getPersonalInfo(): Promise<PersonalInfoEntity> {
         // Dados das informações pessoais
         const personalData = {
-            name: 'Matheus Vinicius',
+            name: 'Matheus Website',
             title: 'Full Stack Developer',
-            avatarUrl: '/assets/avatar.svg', // ou uma URL de avatar real
+            avatarUrl: '/assets/avatar.svg',
             email: 'matheusviniciusdrs5555@gmail.com',
-            telegram: '@teusdrz', // ou seu telegram
+            telegram: '@teusdrz',
             linkedin: 'https://www.linkedin.com/in/matheus-vinicius-82b50a26b/'
         };
 

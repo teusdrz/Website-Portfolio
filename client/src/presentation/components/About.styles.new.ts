@@ -2,16 +2,16 @@ import styled, { keyframes } from 'styled-components';
 import { theme } from '../theme/theme';
 
 interface AboutContainerProps {
-  isVisible: boolean;
+    isVisible: boolean;
 }
 
 interface SkillsCarouselProps {
-  skillIndex: number;
-  isHardSkills: boolean;
+    skillIndex: number;
+    isHardSkills: boolean;
 }
 
 interface NavigationDotProps {
-  active: boolean;
+    active: boolean;
 }
 
 const slideInFromRight = keyframes`
@@ -36,30 +36,17 @@ const slideOutToRight = keyframes`
   }
 `;
 
-const skillSlideFromRight = keyframes`
+const skillTransition = keyframes`
   0% {
-    transform: translateX(80px);
+    transform: perspective(1000px) rotateY(-15deg) translateX(-20px);
     opacity: 0;
   }
-  20% {
-    opacity: 0.3;
-  }
-  60% {
-    opacity: 0.8;
+  50% {
+    transform: perspective(1000px) rotateY(0deg) translateX(0px);
+    opacity: 0.7;
   }
   100% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-`;
-
-const titleSlideFromRight = keyframes`
-  0% {
-    transform: translateX(50px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
+    transform: perspective(1000px) rotateY(0deg) translateX(0px);
     opacity: 1;
   }
 `;
@@ -168,16 +155,16 @@ export const SkillsContainer = styled.div`
   user-select: none;
 `;
 
-export const SkillsCarousel = styled.div<SkillsCarouselProps & { scrollOffset?: number }>`
+export const SkillsCarousel = styled.div<SkillsCarouselProps>`
   width: 100%;
   height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
-  transform: translateX(${props => props.scrollOffset || 0}px);
-  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: ${skillTransition} 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  transform: perspective(1000px) ${props => props.isHardSkills ? 'rotateX(0deg)' : 'rotateX(5deg)'};
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 
   @media (max-width: 768px) {
     height: 300px;
@@ -194,19 +181,25 @@ export const SkillSection = styled.div`
   max-width: 800px;
 `;
 
-export const SectionTitle = styled.h2<{ isChanging?: boolean }>`
+export const SectionTitle = styled.h2`
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   color: ${theme.colors.primary};
-  margin-bottom: 32px;
-  opacity: 0.9;
-  text-align: center;
+  margin-bottom: 16px;
   position: relative;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  opacity: 0.9;
   
-  ${props => props.isChanging && `
-    animation: ${() => titleSlideFromRight} 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-  `}
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, ${theme.colors.primary}, transparent);
+    border-radius: 2px;
+  }
 `;
 
 export const SectionSubtitle = styled.h3`
@@ -218,21 +211,60 @@ export const SectionSubtitle = styled.h3`
   letter-spacing: 0.02em;
 `;
 
-export const SkillText = styled.h3<{ skillKey?: string }>`
-  font-size: clamp(2.2rem, 5vw, 3.5rem);
-  font-weight: 400;
+export const SkillCard = styled.div`
+  background: linear-gradient(135deg, rgba(80, 255, 108, 0.1) 0%, rgba(80, 255, 108, 0.05) 100%);
+  border: 2px solid ${theme.colors.primary};
+  padding: 40px 60px;
+  border-radius: 24px;
   color: ${theme.colors.text};
-  text-align: center;
-  margin: 0;
-  opacity: 0.9;
-  letter-spacing: 0.01em;
-  line-height: 1.3;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 600;
   position: relative;
-  animation: ${() => skillSlideFromRight} 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-  transform-origin: center;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(80, 255, 108, 0.1);
   
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      from 0deg,
+      transparent,
+      rgba(80, 255, 108, 0.1),
+      transparent,
+      rgba(80, 255, 108, 0.1),
+      transparent
+    );
+    animation: rotate 8s linear infinite;
+    opacity: 0.5;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: ${theme.colors.background};
+    border-radius: 22px;
+    z-index: -1;
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   @media (max-width: 768px) {
-    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    padding: 30px 40px;
   }
 `;
 
@@ -278,6 +310,7 @@ export const ContactSection = styled.div`
   gap: 24px;
   margin-top: auto;
   padding-top: 32px;
+  border-top: 1px solid rgba(80, 255, 108, 0.2);
   flex-shrink: 0;
 
   @media (max-width: 768px) {
